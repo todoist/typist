@@ -1,6 +1,7 @@
 import { InputRule, markInputRule, markPasteRule, PasteRule } from '@tiptap/core'
-import { Link } from '@tiptap/extension-link'
+import { isAllowedUri, Link } from '@tiptap/extension-link'
 
+import type { ExtendedRegExpMatchArray } from '@tiptap/core'
 import type { LinkOptions } from '@tiptap/extension-link'
 
 /**
@@ -14,6 +15,39 @@ const inputRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)$/i
  * in case the `Typography` extension is being included).
  */
 const pasteRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)/gi
+
+/**
+ * Creates the `getAttributes` function for the Markdown link input and paste rules, which skips
+ * matches with link URLs not allowed by the `isAllowedUri` option of the `Link` extension
+ * (matching the validation of the built-in `setLink` and `toggleLink` commands).
+ *
+ * @param options The options of the `Link` extension.
+ *
+ * @returns The `getAttributes` function for the Markdown link input and paste rules.
+ */
+function createGetLinkAttributes(options: LinkOptions) {
+    return (match: ExtendedRegExpMatchArray) => {
+        // We need to use `pop()` to remove the last capture groups from the match to satisfy
+        // Tiptap's `markInputRule` and `markPasteRule` expectation of having the content as the
+        // last capture group in the match (this makes the attribute order important)
+        const title = match.pop()?.trim()
+        const href = match.pop()?.trim()
+
+        // Skip the rule for link URLs not allowed by the `isAllowedUri` option
+        if (
+            !href ||
+            !options.isAllowedUri(href, {
+                defaultValidate: (url) => Boolean(isAllowedUri(url, options.protocols)),
+                protocols: options.protocols,
+                defaultProtocol: options.defaultProtocol,
+            })
+        ) {
+            return false
+        }
+
+        return { title, href }
+    }
+}
 
 /**
  * Input rule built specifically for the `Link` extension, which ignores the auto-linked URL in
@@ -87,16 +121,7 @@ const RichTextLink = Link.extend<RichTextLinkOptions>({
             linkInputRule({
                 find: inputRegex,
                 type: this.type,
-
-                // We need to use `pop()` to remove the last capture groups from the match to
-                // satisfy Tiptap's `markPasteRule` expectation of having the content as the last
-                // capture group in the match (this makes the attribute order important)
-                getAttributes(match) {
-                    return {
-                        title: match.pop()?.trim(),
-                        href: match.pop()?.trim(),
-                    }
-                },
+                getAttributes: createGetLinkAttributes(this.options),
             }),
         ]
     },
@@ -105,16 +130,7 @@ const RichTextLink = Link.extend<RichTextLinkOptions>({
             linkPasteRule({
                 find: pasteRegex,
                 type: this.type,
-
-                // We need to use `pop()` to remove the last capture groups from the match to
-                // satisfy Tiptap's `markInputRule` expectation of having the content as the last
-                // capture group in the match (this makes the attribute order important)
-                getAttributes(match) {
-                    return {
-                        title: match.pop()?.trim(),
-                        href: match.pop()?.trim(),
-                    }
-                },
+                getAttributes: createGetLinkAttributes(this.options),
             }),
         ]
     },
