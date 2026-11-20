@@ -14,6 +14,7 @@ import { rehypeImage } from './plugins/rehype-image'
 import { rehypeSuggestions } from './plugins/rehype-suggestions'
 import { rehypeTable } from './plugins/rehype-table'
 import { rehypeTaskList } from './plugins/rehype-task-list'
+import { rehypeUnsafeUrls } from './plugins/rehype-unsafe-urls'
 import { remarkAutolinkLiteral } from './plugins/remark-autolink-literal'
 import { remarkDisableConstructs } from './plugins/remark-disable-constructs'
 import { remarkIgnoreAngleBracketAutolinks } from './plugins/remark-ignore-angle-bracket-autolinks'
@@ -167,6 +168,10 @@ function createHTMLSerializer(schema: Schema): HTMLSerializerReturnType {
 
     // Configure the unified processor with a custom plugin to add support for suggestions nodes
     unifiedProcessor.use(rehypeSuggestions, schema)
+
+    // Configure the unified processor with a custom plugin to remove link URLs with schemes that
+    // can execute scripts (e.g., `javascript:`), preventing XSS attacks
+    unifiedProcessor.use(rehypeUnsafeUrls)
 
     // Configure the unified processor with an official plugin that defines how to take a syntax
     // tree as input and turn it into serialized HTML

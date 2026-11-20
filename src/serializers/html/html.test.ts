@@ -626,6 +626,23 @@ Answer: [Doist Frontend](channel://190200)`),
                 expect(htmlSerializer.serialize('<https://duckduckgo.com>')).toBe('<p>&lt;https://duckduckgo.com></p>')
             })
 
+            test.each([
+                ['javascript', '[click](javascript:alert(1))'],
+                ['mixed-case javascript', '[click](JaVaScRiPt:alert(1))'],
+                ['entity-encoded javascript', '[click](&#x6A;avascript&colon;alert(1))'],
+                ['vbscript', '[click](vbscript:msgbox(1))'],
+                ['data', '[click](data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==)'],
+                ['reference-style javascript', '[click]\n\n[click]: javascript:alert(1)'],
+            ])('links with %s URLs have their URL removed', (_, markdown) => {
+                expect(htmlSerializer.serialize(markdown)).toBe('<p><a>click</a></p>')
+            })
+
+            test('links with custom schemes and percent-encoded control characters are preserved', () => {
+                expect(htmlSerializer.serialize('[app](todoist://task?id=1) [tab](java&#x09;script:alert(1))')).toBe(
+                    '<p><a href="todoist://task?id=1">app</a> <a href="java%09script:alert(1)">tab</a></p>',
+                )
+            })
+
             test('styled links HTML output is correct', () => {
                 expect(htmlSerializer.serialize(MARKDOWN_INPUT_STYLED_LINKS)).toBe(
                     '<p>I love supporting the <strong><a href="https://eff.org">EFF</a></strong>.<br>I love supporting the <strong><a href="https://eff.org">https://eff.org</a></strong>.<br>This is the <em><a href="https://www.markdownguide.org">Markdown Guide</a></em>.<br>This is the <em><a href="https://www.markdownguide.org">https://www.markdownguide.org</a></em>.<br>See the section on <a href="#code"><code>code</code></a>.</p>',
