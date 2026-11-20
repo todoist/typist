@@ -63,10 +63,7 @@ function linkInputRule(config: Parameters<typeof markInputRule>[0]) {
         handler(props) {
             const { tr } = props.state
 
-            if (defaultMarkInputRule.handler(props) === null) {
-                return
-            }
-
+            defaultMarkInputRule.handler(props)
             tr.setMeta('preventAutolink', true)
         },
     })
@@ -87,10 +84,7 @@ function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
         handler(props) {
             const { tr } = props.state
 
-            if (defaultMarkPasteRule.handler(props) === null) {
-                return
-            }
-
+            defaultMarkPasteRule.handler(props)
             tr.setMeta('preventAutolink', true)
         },
     })
