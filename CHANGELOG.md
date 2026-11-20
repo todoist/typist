@@ -1,3 +1,9 @@
+## [18.0.1](https://github.com/todoist/typist/compare/v18.0.0...v18.0.1) (2026-11-20)
+
+### Bug Fixes
+
+* strip script URLs from links in the HTML serializer ([#1603](https://github.com/todoist/typist/issues/1603)) ([7cc97a7](https://github.com/todoist/typist/commit/7cc97a7c082947955bba836c677d500e2dc7cda5))
+
 ## [18.0.0](https://github.com/todoist/typist/compare/v17.1.2...v18.0.0) (2026-11-11)
 
 ### ⚠ BREAKING CHANGES
