@@ -1,3 +1,9 @@
+## [18.0.2](https://github.com/todoist/typist/compare/v18.0.1...v18.0.2) (2026-11-20)
+
+### Bug Fixes
+
+* validate URLs in the Markdown link input and paste rules ([#1606](https://github.com/todoist/typist/issues/1606)) ([bfeecba](https://github.com/todoist/typist/commit/bfeecbade42abc3a2d247c8d89c55d5354d1039d))
+
 ## [18.0.1](https://github.com/todoist/typist/compare/v18.0.0...v18.0.1) (2026-11-20)
 
 ### Bug Fixes
