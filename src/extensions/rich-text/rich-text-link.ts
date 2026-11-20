@@ -1,5 +1,5 @@
 import { InputRule, markInputRule, markPasteRule, PasteRule } from '@tiptap/core'
-import { Link } from '@tiptap/extension-link'
+import { isAllowedUri, Link } from '@tiptap/extension-link'
 
 import type { LinkOptions } from '@tiptap/extension-link'
 
@@ -16,6 +16,23 @@ const inputRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)$/i
 const pasteRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)/gi
 
 /**
+ * Determines whether a link URL is allowed by the `isAllowedUri` option of the `Link` extension,
+ * matching the validation of the built-in `setLink` and `toggleLink` commands.
+ *
+ * @param url The link URL to validate.
+ * @param options The options of the `Link` extension.
+ *
+ * @returns `true` if the link URL is allowed, `false` otherwise.
+ */
+function isAllowedLinkUri(url: string, options: LinkOptions): boolean {
+    return options.isAllowedUri(url, {
+        defaultValidate: (uri) => Boolean(isAllowedUri(uri, options.protocols)),
+        protocols: options.protocols,
+        defaultProtocol: options.defaultProtocol,
+    })
+}
+
+/**
  * Input rule built specifically for the `Link` extension, which ignores the auto-linked URL in
  * parentheses (e.g., `(https://doist.dev)`).
  *
@@ -29,7 +46,10 @@ function linkInputRule(config: Parameters<typeof markInputRule>[0]) {
         handler(props) {
             const { tr } = props.state
 
-            defaultMarkInputRule.handler(props)
+            if (defaultMarkInputRule.handler(props) === null) {
+                return null
+            }
+
             tr.setMeta('preventAutolink', true)
         },
     })
@@ -50,7 +70,10 @@ function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
         handler(props) {
             const { tr } = props.state
 
-            defaultMarkPasteRule.handler(props)
+            if (defaultMarkPasteRule.handler(props) === null) {
+                return null
+            }
+
             tr.setMeta('preventAutolink', true)
         },
     })
@@ -83,6 +106,8 @@ const RichTextLink = Link.extend<RichTextLinkOptions>({
         }
     },
     addInputRules() {
+        const { options } = this
+
         return [
             linkInputRule({
                 find: inputRegex,
@@ -92,15 +117,22 @@ const RichTextLink = Link.extend<RichTextLinkOptions>({
                 // satisfy Tiptap's `markPasteRule` expectation of having the content as the last
                 // capture group in the match (this makes the attribute order important)
                 getAttributes(match) {
-                    return {
-                        title: match.pop()?.trim(),
-                        href: match.pop()?.trim(),
+                    const title = match.pop()?.trim()
+                    const href = match.pop()?.trim()
+
+                    // Skip the input rule for link URLs not allowed by the `isAllowedUri` option
+                    if (!href || !isAllowedLinkUri(href, options)) {
+                        return false
                     }
+
+                    return { title, href }
                 },
             }),
         ]
     },
     addPasteRules() {
+        const { options } = this
+
         return [
             linkPasteRule({
                 find: pasteRegex,
@@ -110,10 +142,15 @@ const RichTextLink = Link.extend<RichTextLinkOptions>({
                 // satisfy Tiptap's `markInputRule` expectation of having the content as the last
                 // capture group in the match (this makes the attribute order important)
                 getAttributes(match) {
-                    return {
-                        title: match.pop()?.trim(),
-                        href: match.pop()?.trim(),
+                    const title = match.pop()?.trim()
+                    const href = match.pop()?.trim()
+
+                    // Skip the paste rule for link URLs not allowed by the `isAllowedUri` option
+                    if (!href || !isAllowedLinkUri(href, options)) {
+                        return false
                     }
+
+                    return { title, href }
                 },
             }),
         ]
