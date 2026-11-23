@@ -272,9 +272,9 @@ function createSuggestionExtension<
                     pluginKey: new PluginKey(nodeType),
                     editor: this.editor,
                     char: triggerChar,
-                    allowedPrefixes,
-                    allowSpaces,
-                    startOfLine,
+                    ...(allowedPrefixes !== undefined ? { allowedPrefixes } : {}),
+                    ...(allowSpaces !== undefined ? { allowSpaces } : {}),
+                    ...(startOfLine !== undefined ? { startOfLine } : {}),
                     items({ query }) {
                         const requestId = ++latestRequestId
 
@@ -331,7 +331,7 @@ function createSuggestionExtension<
                             onItemSelect?.(item)
                         }
                     },
-                    render: dropdownRenderFn,
+                    ...(dropdownRenderFn ? { render: dropdownRenderFn } : {}),
                 }),
             ]
         },

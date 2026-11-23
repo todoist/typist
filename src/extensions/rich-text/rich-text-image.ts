@@ -129,7 +129,6 @@ const RichTextImage = Image.extend<RichTextImageOptions>({
         return {
             ...this.parent?.(),
             acceptedImageMimeTypes: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'],
-            NodeViewComponent: undefined,
         }
     },
     addAttributes() {

@@ -23,7 +23,10 @@ type ViewEventHandlersOptions = {
     onKeyDown?: (event: KeyboardEvent, view: EditorView) => boolean | void
 }
 
-type ViewEventHandlersStorage = ViewEventHandlersOptions
+type ViewEventHandlersStorage = {
+    onClick: ViewEventHandlersOptions['onClick']
+    onKeyDown: ViewEventHandlersOptions['onKeyDown']
+}
 
 /**
  * Augment the official `@tiptap/core` module with extra commands, relevant for this extension, so
