@@ -255,8 +255,8 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
                     : []),
                 ExtraEditorCommands,
                 ViewEventHandlers.configure({
-                    onClick: initialOnClick,
-                    onKeyDown: initialOnKeyDown,
+                    ...(initialOnClick ? { onClick: initialOnClick } : {}),
+                    ...(initialOnKeyDown ? { onKeyDown: initialOnKeyDown } : {}),
                 }),
                 // Always register external extensions at the end so they get a higher priority and
                 // are loaded earlier (necessary to override behaviors from built-in extensions)
@@ -402,7 +402,10 @@ const TypistEditor = forwardRef<TypistEditorRef, TypistEditorProps>(function Typ
     // could still reach the previous handlers.
     useLayoutEffect(
         function syncViewEventHandlers() {
-            editor.commands.setViewEventHandlers({ onClick, onKeyDown })
+            editor.commands.setViewEventHandlers({
+                ...(onClick ? { onClick } : {}),
+                ...(onKeyDown ? { onKeyDown } : {}),
+            })
         },
         [editor, onClick, onKeyDown],
     )

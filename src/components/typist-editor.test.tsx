@@ -20,7 +20,7 @@ type TypistEditorRendererProps = Partial<
 function renderRichTextEditor({
     ExtensionKit = RichTextKit,
     multiline = true,
-    editable,
+    editable = true,
     extensions,
     'aria-describedby': ariaDescribedBy,
     'aria-label': ariaLabel,

@@ -4,7 +4,7 @@ import type { Meta } from '@storybook/react-vite'
 import type { TypistEditor, TypistEditorProps } from '../../../src'
 import type { RichTextKitOptions } from '../../../src/extensions/rich-text/rich-text-kit'
 
-const DEFAULT_ARG_TYPES: Meta<typeof TypistEditor>['argTypes'] = {
+const DEFAULT_ARG_TYPES: NonNullable<Meta<typeof TypistEditor>['argTypes']> = {
     extensions: {
         table: {
             disable: true,
