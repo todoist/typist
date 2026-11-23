@@ -56,17 +56,21 @@ jobs:
                   cache: npm
                   node-version-file: .node-version
 
-            - name: Cache project 'node_modules' directory
+            # The cache is only restored, and never saved, because this job installs dependencies
+            # without lifecycle scripts, and the other jobs must not inherit that installation.
+            - name: Restore project 'node_modules' directory
               id: node-modules-cache
-              uses: actions/cache@v5
+              uses: actions/cache/restore@v5
               with:
                   key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
                   path: node_modules/
 
+            # This job can mint OIDC tokens to publish the package, so dependency lifecycle scripts
+            # are never run here, where a compromised dependency could use them to publish.
             - name: Install project npm dependencies
               if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
               run: |
-                  npm ci
+                  npm ci --ignore-scripts
 
             - name: Build package
               run: |
@@ -110,6 +114,6 @@ jobs:
             - name: Publish package to private GitHub Packages registry
               if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
               run: |
-                  npm publish --tag ${{ steps.dist-tag.outputs.tag }}
+                  npm publish --ignore-scripts --tag ${{ steps.dist-tag.outputs.tag }}
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
