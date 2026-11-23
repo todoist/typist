@@ -6,9 +6,6 @@ on:
             - main
             - next
 
-env:
-    GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-
 permissions:
     # Enable the use of OIDC for trusted publishing and npm provenance
     id-token: write
