@@ -23,9 +23,9 @@
     "sortImports": {
         "customGroups": [
             {
-                "groupName": "doist-side-effect-style",
+                "groupName": "todoist-side-effect-style",
                 "selector": "side_effect_style",
-                "elementNamePattern": ["@doist/**/*.{css,less}"]
+                "elementNamePattern": ["@todoist/**/*.{css,less}", "@doist/**/*.{css,less}"]
             },
             {
                 "groupName": "scoped-side-effect-style",
@@ -44,10 +44,10 @@
                 "elementNamePattern": ["react", "react-*", "react-dom", "react-dom/**"]
             },
             {
-                "groupName": "doist",
+                "groupName": "todoist",
                 "selector": "external",
                 "modifiers": ["value"],
-                "elementNamePattern": ["@doist/**"]
+                "elementNamePattern": ["@todoist/**", "@doist/**"]
             },
             {
                 "groupName": "scoped",
@@ -62,10 +62,10 @@
                 "elementNamePattern": ["react", "react-*", "react-dom", "react-dom/**"]
             },
             {
-                "groupName": "doist-type",
+                "groupName": "todoist-type",
                 "selector": "external",
                 "modifiers": ["type"],
-                "elementNamePattern": ["@doist/**"]
+                "elementNamePattern": ["@todoist/**", "@doist/**"]
             },
             {
                 "groupName": "scoped-type",
@@ -77,12 +77,12 @@
         "groups": [
             "value-builtin",
             "side_effect",
-            "doist-side-effect-style",
+            "todoist-side-effect-style",
             "scoped-side-effect-style",
             "package-side-effect-style",
             "side_effect_style",
             "react",
-            "doist",
+            "todoist",
             "value-external",
             "scoped",
             "value-internal",
@@ -97,7 +97,7 @@
             {
                 "newlinesBetween": false
             },
-            "doist-type",
+            "todoist-type",
             {
                 "newlinesBetween": false
             },
