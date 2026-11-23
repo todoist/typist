@@ -15,11 +15,6 @@
             "matchPackageNames": ["/gfm-strikethrough$/"]
         },
         {
-            "description": "Keep v9 until semantic-release supports v10.",
-            "matchPackageNames": ["conventional-changelog-conventionalcommits"],
-            "allowedVersions": "<10"
-        },
-        {
             "description": "Keep v6 until Node.js 24.15.0 is the minimum supported version.",
             "matchPackageNames": ["@semantic-release/changelog"],
             "allowedVersions": "<7"
