@@ -15,16 +15,6 @@
             "matchPackageNames": ["/gfm-strikethrough$/"]
         },
         {
-            "description": "Keep v6 until Node.js 24.15.0 is the minimum supported version.",
-            "matchPackageNames": ["@semantic-release/changelog"],
-            "allowedVersions": "<7"
-        },
-        {
-            "description": "Keep v10 until Node.js 24.15.0 is the minimum supported version.",
-            "matchPackageNames": ["@semantic-release/git"],
-            "allowedVersions": "<11"
-        },
-        {
             "description": "Keep tsdown compatible with TypeScript 7.0 until compatibility is restored or TypeScript 7.1 is stable.",
             "matchPackageNames": ["tsdown"],
             "allowedVersions": "<=0.23.1"
