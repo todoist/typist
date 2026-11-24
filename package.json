@@ -159,7 +159,7 @@
         "storybook-css-modules": "1.0.8",
         "tippy.js": "6.3.7",
         "tsdown": "0.23.1",
-        "type-fest": "6.0.1",
+        "type-fest": "6.0.2",
         "typescript": "7.0.2",
         "vitest": "5.1.1"
     },
