@@ -1,3 +1,9 @@
+## [18.0.4](https://github.com/todoist/typist/compare/v18.0.3...v18.0.4) (2026-11-25)
+
+### Bug Fixes
+
+* **deps:** update dependency mdast-util-gfm-autolink-literal to v2.1.1 ([#1623](https://github.com/todoist/typist/issues/1623)) ([5d59039](https://github.com/todoist/typist/commit/5d5903978e4425b445b2cf99e35aeddc953fe325))
+
 ## [18.0.3](https://github.com/todoist/typist/compare/v18.0.2...v18.0.3) (2026-11-20)
 
 ### Bug Fixes
